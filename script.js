@@ -65,6 +65,8 @@ function removeFlip (){
 }
 let play1;
 let play2;
+let contadorclicks = 0;
+let playcorreta = 0;
 
 function verifyCards(cartaClicada){
     if (play1 == undefined){
@@ -74,8 +76,7 @@ function verifyCards(cartaClicada){
         if(play2 == undefined){
             play2 = cartaClicada;
             if (play1.innerHTML == play2.innerHTML){
-                play1.classList.add('playCorreta');
-                play2.classList.add('playCorreta');
+                playcorreta = playcorreta + 2;
                 play1 = undefined;
                 play2 = undefined;
             }
@@ -84,6 +85,10 @@ function verifyCards(cartaClicada){
             }
         }
     }
+}
+
+function gameWin() {
+    alert(`Você ganhou em ${contadorclicks} jogadas!`)
 }
 
 function clickCard (cartaClicada){
@@ -96,7 +101,10 @@ function clickCard (cartaClicada){
     else{
         cartaClicada.querySelector('.front-face').classList.add('flip-front');
         cartaClicada.querySelector('.back-face').classList.add('flip-back');
+        contadorclicks++;
         verifyCards(cartaClicada);
     }
-    
+    if(playcorreta === numCards){
+        setTimeout(gameWin, 750)
+    }
 }
