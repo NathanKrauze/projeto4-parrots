@@ -36,17 +36,67 @@ function distribuiCards(){
         cardsList.push(baseDados[i]);
     }
     cardsList = cardsList.sort(comparador);
-    console.log(cardsList);
 
     for (let i = 0; i < numCards; i++){
         let imprimeCards = document.querySelector('ul')
         imprimeCards.innerHTML = imprimeCards.innerHTML + `
-        <li>
-            <img src="/imgs/back.png">
-            <img class="escondido" src=${cardsList[i]}>
+        <li onclick="clickCard(this)">
+            <div class="front-face face">
+                <img src="/imgs/back.png">
+            </div>
+            <div class="back-face face flipped-back">
+                <img src=${cardsList[i]}>
+            </div>
         </li>`
     }
 
 }
 
 distribuiCards()
+
+
+function removeFlip (){
+    play1.querySelector('.back-face').classList.remove('flip-back');
+    play1.querySelector('.front-face').classList.remove('flip-front');
+    play2.querySelector('.back-face').classList.remove('flip-back');
+    play2.querySelector('.front-face').classList.remove('flip-front');
+    play1 = undefined;
+    play2 = undefined;
+}
+let play1;
+let play2;
+
+function verifyCards(cartaClicada){
+    if (play1 == undefined){
+        play1 = cartaClicada;
+    }
+    else{
+        if(play2 == undefined){
+            play2 = cartaClicada;
+            if (play1.innerHTML == play2.innerHTML){
+                play1.classList.add('playCorreta');
+                play2.classList.add('playCorreta');
+                play1 = undefined;
+                play2 = undefined;
+            }
+            else{
+                setTimeout(removeFlip, 1000);
+            }
+        }
+    }
+}
+
+function clickCard (cartaClicada){
+    if(cartaClicada.querySelector('.back-face').classList.contains('flip-back')){
+        return;
+    }
+    else if (play1 !== undefined && play2 !== undefined){
+        return;
+    }
+    else{
+        cartaClicada.querySelector('.front-face').classList.add('flip-front');
+        cartaClicada.querySelector('.back-face').classList.add('flip-back');
+        verifyCards(cartaClicada);
+    }
+    
+}
